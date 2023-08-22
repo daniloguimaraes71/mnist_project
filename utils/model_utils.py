@@ -30,6 +30,7 @@ def get_model_new_version(save_dir):
     Returns:
         int: 新しいモデルバージョン
     """
+    os.makedirs(save_dir, exist_ok=True)
     existing_versions = [int(version) for version in os.listdir(save_dir) if version.isdigit()]
     if existing_versions:
         return max(existing_versions) + 1
