@@ -2,12 +2,12 @@
 MNISTデータローダーユーティリティモジュール
 
 このモジュールには、MNISTデータセットの前処理とデータローダーの取得を行う関数が含まれています。
-トレーニングやテストデータのデータローダーを簡単に取得するために使用されます。
+訓練やテストデータのデータローダーを簡単に取得するために使用されます。
 
 使用方法:
     1. モジュールをインポート: `import utils.data_loader as data_loader`
     2. データローダーを取得:
-       - トレーニングデータローダー: `train_loader = data_loader.get_mnist_data_loader(batch_size, is_train=True)`
+       - 訓練データローダー: `train_loader = data_loader.get_mnist_data_loader(batch_size, is_train=True)`
        - テストデータローダー: `test_loader = data_loader.get_mnist_data_loader(batch_size, is_train=False)`
 
 このモジュールは、MNISTデータセットの前処理を行い、データローダーを取得するのに役立ちます。
@@ -22,7 +22,7 @@ def get_mnist_data_loader(batch_size, is_train=True):
 
     Args:
         batch_size (int): バッチサイズ
-        is_train (bool): トレーニングデータかどうかのフラグ
+        is_train (bool): 訓練データかどうかのフラグ
 
     Returns:
         DataLoader: データローダーオブジェクト

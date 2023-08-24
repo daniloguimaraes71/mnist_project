@@ -1,11 +1,11 @@
 """
-モデルトレーニングスクリプト
+モデル訓練スクリプト
 
-このスクリプトは、MNISTモデルのトレーニングを行うために使用されます。トレーニングデータローダーを作成し、指定された設定でモデルのトレーニングを実行します。
+このスクリプトは、MNISTモデルの訓練を行うために使用されます。訓練データローダーを作成し、指定された設定でモデルの訓練を実行します。
 
 使用方法:
     1. スクリプトをインポート: `from scripts.train import train`
-    2. トレーニングを実行:
+    2. 訓練を実行:
        - コンフィグファイルをロード: `config = load_config("config/config.json")`                                                                                                                                                                                
        - 学習を実行: `train(config)`
 """
@@ -19,12 +19,12 @@ import torch
 
 def train(config):
     """
-    モデルのトレーニングを実行します。
+    モデルの訓練を実行します。
 
-    この関数は、指定された設定でMNISTモデルのトレーニングを行います。
+    この関数は、指定された設定でMNISTモデルの訓練を行います。
     
     Args:
-        config (dict): トレーニングのための設定が含まれる辞書
+        config (dict): 訓練のための設定が含まれる辞書
 
     Returns:
         None
@@ -34,5 +34,5 @@ def train(config):
     # モデルの初期化
     model = NeuralNetworkModel()
 
-    # モデルのトレーニング
+    # モデルの訓練
     trainer.train_model(model, train_loader, config)

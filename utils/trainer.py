@@ -1,17 +1,17 @@
 """
 モデルトレーナーユーティリティモジュール
 
-このモジュールには、モデルのトレーニングを行うための関数が含まれています。
-トレーニングデータを使用してモデルを学習し、トレーニング損失を記録して保存します。
+このモジュールには、モデルの訓練を行うための関数が含まれています。
+訓練データを使用してモデルを学習し、訓練損失を記録して保存します。
 
 使用方法:
     1. モジュールをインポート: `import utils.trainer as trainer`
-    2. model: トレーニング対象のモデルを用意
-    3. train_loader: トレーニングデータのデータローダーを用意
+    2. model: 訓練対象のモデルを用意
+    3. train_loader: 訓練データのデータローダーを用意
     4. config: 設定情報を含む辞書を準備
-    5. トレーニングを実行: `trainer.train_model(model, train_loader, config)`
+    5. 訓練を実行: `trainer.train_model(model, train_loader, config)`
 
-このモジュールは、モデルのトレーニングプロセスを自動化し、トレーニング損失を記録して保存するのに役立ちます。
+このモジュールは、モデルの訓練プロセスを自動化し、訓練損失を記録して保存するのに役立ちます。
 """
 
 import torch
@@ -24,11 +24,11 @@ import json
 
 def train_model(model, train_loader, config):
     """
-    モデルのトレーニングを実行します。
+    モデルの訓練を実行します。
 
     Args:
-        model (nn.Module): トレーニング対象のモデル
-        train_loader (DataLoader): トレーニングデータのデータローダー
+        model (nn.Module): 訓練対象のモデル
+        train_loader (DataLoader): 訓練データのデータローダー
         config (dict): 設定情報が含まれる辞書
 
     Returns:
@@ -43,7 +43,7 @@ def train_model(model, train_loader, config):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=config["learning_rate"])
 
-    # トレーニングを開始
+    # 訓練を開始
     logging.info('Training started...')
     training_losses = []
     
@@ -60,12 +60,12 @@ def train_model(model, train_loader, config):
             running_loss += loss.item()
         average_loss = running_loss / len(train_loader)
 
-        # ログにトレーニング損失を追記
+        # ログに訓練損失を追記
         logging.info(f"Epoch [{epoch+1}/{config['epochs']}], Average Loss: {average_loss:.4f}")
 
         training_losses_dict = {f'epoch{epoch+1}':average_loss}
         
-        # 各エポックのトレーニング損失を保存
+        # 各エポックの訓練損失を保存
         training_losses.append(training_losses_dict)
         
         # モデルのバージョンを取得し、保存
@@ -79,11 +79,11 @@ def train_model(model, train_loader, config):
     metrics_folder = f"{config['model_save_dir']}{model_version}/metrics/"                                                                                                                                                                                
     os.makedirs(metrics_folder, exist_ok=True) 
         
-    # トレーニング損失をJSONファイルに保存
+    # 訓練損失をJSONファイルに保存
     losses_filename = os.path.join(metrics_folder, f'training_losses.json')
     with open(losses_filename, 'w') as f:
         json.dump(training_losses, f)
         
-    # ログにトレーニング結果を追記
+    # ログに訓練結果を追記
     logging.info('Training completed.')
     logging.info(f"Model weights of version {model_version} saved in path ../{config['model_save_dir']}{model_version}/")
