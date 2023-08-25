@@ -51,7 +51,7 @@
 
 このドキュメントを効果的に活用するには、以下の前提条件を満たしていることが必要です。
 
-- Python: プロジェクトの実行にはPythonプログラミング言語が必要です。Python 3.8のバージョンが推奨されます。
+- 環境構築：ソースコードと一緒に提供される`環境構築`ファイルに記載されているライブラリのインストール方法や設定を行います。
 
 - インターネット接続: MNISTデータセットのダウンロードにインターネット接続が必要です。
 
@@ -69,18 +69,80 @@
 
 ### 6.1．ソースコードの準備と展開
 
-1. ソースコードのダウンロード：
-   - プロジェクトのソースコードを適当な場所にダウンロードします。
+**1. ソースコードのダウンロード**
+ソースコードのダウンロードは以下のいずれかの方法を選択できます。
 
-2. ソースコード展開：
-   - ターミナルを開き、プロジェクトフォルダに移動します。
-     ```console
-     $ cd [プロジェクトフォルダのパス]
-     ```
+   - **ZIPファイルのダウンロード:**
+    プロジェクトのソースコードがメールに添付された`mnist_project.zip`ファイルをダウンロードします。
+
+   - **Gitリポジトリのクローン:**
+    プロジェクトのソースコードは、次のGitリポジトリに格納されています。以下のコマンドを使用してリポジトリをクローンします。
+      1. ターミナルを開き、プロジェクトフォルダに移動します。
+      ```sh
+      $ cd [プロジェクトフォルダのパス]
+      ```
+      2. ソースコードをクローンします。
+      ```sh
+      $ git clone https://github.com/daniloguimaraes71/mnist_project.git
+      ```
+
+**2. ソースコード展開**
+ZIPファイルをダウンロードした場合、次のコマンドを使用してファイルを展開します。
+   - ファイルをプロジェクトフォルダに移動します。
+      ```sh
+      $ mv [ダウンロードフォルダのパス]/mnist_project.zip [プロジェクトフォルダのパス]/mnist_project.zip
+      ```
+
+   - プロジェクトフォルダに移動します。
+      ```sh
+      $ cd [プロジェクトフォルダのパス]
+      ```
+
    - ソースコードを展開します。
-     ```console
-     $ unzip -o source_code.zip
-     ```
+      ```sh
+      $ unzip -o mnist_project.zip
+      ```
+
+
+**3. プロジェクトフォルダの構造確認**
+  プロジェクトのセットアップが完了した後、確認のコマンドで以下のようなフォルダ構造になるか確認します。
+    ```sh
+    $ tree [プロジェクトフォルダのパス]
+    ```
+
+
+ - フォルダ構成
+```
+[プロジェクトフォルダのパス]
+└── mnist_project
+    ├── config
+    │   ├── config.json
+    │   ├── config.py
+    │   ├── __init__.py
+    │   └── libraries.txt
+    ├── evaluation_mnist.ipynb
+    ├── main.py
+    ├── models
+    │   ├── __init__.py
+    │   └── model.py
+    ├── README.md
+    ├── screen_shots
+    │   ├── jupyter_cell_output.png
+    │   ├── jupyter_dashboard.png
+    │   ├── run_jupyter_cell.png
+    │   └── save_and_close_notebook.png
+    ├── scripts
+    │   ├── test.py
+    │   └── train.py
+    └── utils
+        ├── data_loader.py
+        ├── __init__.py
+        ├── logger.py
+        ├── model_utils.py
+        ├── plot_metrics.py
+        ├── tester.py
+        └── trainer.py
+```
 
 ### 6.2．コンフィグファイルの設定
 
@@ -118,22 +180,22 @@
 
 **注:_**  本章で紹介されるターミナルコマンドは、プロジェクトフォルダ内で実行する必要があります。プロジェクトフォルダ内に移動するために、以下のコマンドを使用してください。
 
-```console
+```sh
 $ cd [プロジェクトフォルダのパス]
 ```
 
 ### 7.1. 訓練コードの実行
 
-1. 訓練コードの実行：
+**1. 訓練コードの実行**
 
-```console
+```sh
 $ python3 main.py --mode train
 ```
 
 - 訓練中にはログ情報がターミナルに表示されます。
 - 訓練の進行状況や各エポックごとの訓練損失が表示されます。
 - 出力例)
-  ```console
+  ```sh
   2023-08-24 17:47:37,622 [INFO] Device: cuda
   2023-08-24 17:47:37,622 [INFO] Training started...
   2023-08-24 17:47:46,328 [INFO] Epoch [1/10], Average Loss: 0.4081
@@ -150,7 +212,7 @@ $ python3 main.py --mode train
   2023-08-24 17:48:59,153 [INFO] Model weights of version 1 saved in path ../outputs/saved_models/1/
   ```
 
-2. 訓練結果の保存パス：
+**2. 訓練結果の保存パス**
 - 訓練が完了すると、訓練済みモデルが以下のディレクトリに保存されます。
   ```
   [プロジェクトフォルダのパス]/outputs/saved_models/[モデルバージョン]
@@ -164,17 +226,17 @@ $ python3 main.py --mode train
 
 ### 7.2. テストコードの実行
 
-1. テストコードの実行：
+**1. テストコードの実行**
 - 特定のモデルバージョンを選択してテストする場合：
-  ```console
+  ```sh
   $ python3 main.py --mode test --model_version [モデルバージョン]
   ```
 - 最新のモデルバージョンを使用してテストする場合：
-  ```console
+  ```sh
   $ python3 main.py --mode test
   ```
 - 出力例)
-  ```console
+  ```sh
   2023-08-24 17:49:46,161 [INFO] Testing started...
   2023-08-24 17:49:46,161 [INFO] Model Version 1
   2023-08-24 17:49:47,790 [INFO] Model epoch 1 - Test Accuracy: 0.9273 Test loss: 0.2481
@@ -190,7 +252,7 @@ $ python3 main.py --mode train
   2023-08-24 17:49:59,281 [INFO] Testing for all weights completed.
   ```
 
-2. テスト結果の保存パス：
+**2. テスト結果の保存パス**
 - テスト損失ファイル`test_losses.json`とテスト精度ファイル`test_accuracy.json`が以下のディレクトリに保存されます。
   ```
   [プロジェクトフォルダのパス]/outputs/saved_models/[モデルバージョン]/metrics/`
@@ -200,34 +262,34 @@ $ python3 main.py --mode train
 
 ### 7.3. 評価コードを実行
 
-1. **Jupyter Notebook を起動：**
+**1. Jupyter Notebook を起動：**
 - ターミナルで、以下のコマンドを実行して Jupyter Notebook を起動します。
-  ```console
+  ```sh
   $ python3 -m notebook
   ```
 
-2. **ブラウザでアクセス：**
+**2. ブラウザでアクセス：**
 - Jupyter Notebook を起動した後、デフォルトのウェブブラウザが自動的に開かれ、Jupyter のダッシュボードが表示されます。ダッシュボードからNotebookファイルの`evaluation_mnist.ipynb`をダブルクリックし、Notebookを開きます。
 
 - 例)
 
 <img src="./screen_shots/jupyter_dashboard.png" alt="drawing" width="700"/>
 
-3. **コードセルの実行：**
+**3. コードセルの実行：**
 - 自動的に新しいタブでNotebookが開かれます。順番にセルを選択し、 Shift キーを押しながら Enter キーを押すと、セルが実行されます。
 
 - 例)
 
 <img src="./screen_shots/run_jupyter_cell.png" alt="drawing" width="700"/>
 
-4. **セルの実行結果を確認：**
+**4. セルの実行結果を確認：**
 - セル内のコードが実行された後、その実行結果がセルの下に表示されます。出力結果やエラーメッセージが表示されることがあります。
 
 - 例)
 
 <img src="./screen_shots/jupyter_cell_output.png" alt="drawing" width="700"/>
 
-5. **ノートブックの保存と閉じる：**
+**5. ノートブックの保存と閉じる：**
 作業が終わったら、ノートブックを保存しましょう。
 
 - ノートブックの上部メニューから「File」をクリックし、保存オプションを選択します。
@@ -237,7 +299,7 @@ $ python3 main.py --mode train
 
 <img src="./screen_shots/save_and_close_notebook.png" alt="drawing" width="700"/>
 
-6. **シャットダウンと終了：**
+**6. シャットダウンと終了：**
 Jupyter Notebook を終了するには、ターミナルで Ctrl + C を押して、Notebook サーバーを停止します。
 
 ## 8. 出力の詳細
@@ -280,7 +342,7 @@ Jupyter Notebook を終了するには、ターミナルで Ctrl + C を押し�
 - 訓練およびテストの実行中に生成されるログは、`outputs/logs/output.log`ファイルに保存されます。
 - 以下のコマンドを使用して、ターミナルでログを表示できます。
 
-```console
+```sh
 $ cat outputs/logs/output.log
 ```
 
