@@ -47,10 +47,10 @@ def test_model(model, test_loader, config, model_version='latest'):
     if model_version == 'latest':
         # 最新のモデルバージョンを取得
         model_version = model_utils.get_latest_model_version(config["model_save_dir"])
-    
+
     # モデルバージョンごとにテストを実行
     model_folder = os.path.join(config["model_save_dir"], str(model_version))
-    model_paths = glob.glob(os.path.join(model_folder, f"model_version{model_version}_*.pt"))
+    model_paths = glob.glob(os.path.join(model_folder, f"model_version_{model_version}_*.pt"))
 
     model_paths.sort(key=lambda f: (os.path.getmtime(f)))
 
@@ -82,7 +82,7 @@ def test_model(model, test_loader, config, model_version='latest'):
             accuracy = correct / total
             average_loss = running_loss / len(test_loader)
             model_file_name = model_path.split('/')[-1]
-            model_epoch_number = int(model_file_name.split('_')[2][5:])
+            model_epoch_number = int(model_file_name.split('_')[2])
             
             logging.info(f'Model epoch {model_epoch_number} - Test Accuracy: {accuracy:.4f} Test loss: {average_loss:.4f}')
 

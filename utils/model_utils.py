@@ -86,7 +86,7 @@ def save_model(model, save_dir, version, epoch):
     os.makedirs(version_folder, exist_ok=True)
     
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    model_filename = os.path.join(version_folder, f"model_version{version}_epoch{epoch}_{timestamp}.pt")
+    model_filename = os.path.join(version_folder, f"model_version_{version}_epoch{epoch}_{timestamp}.pt")
     torch.save(model.state_dict(), model_filename)
 
 def load_model(model, model_path):
@@ -100,5 +100,22 @@ def load_model(model, model_path):
     Returns:
         None
     """
-    model.load_state_dict(torch.load(model_path))
+
+    if torch.cuda.is_available():
+        # GPUが利用可能な場合
+        device = torch.device('cuda')
+        model.to(device)
+        try:
+            model.load_state_dict(torch.load(model_path))
+        except RuntimeError as e:
+            if "Attempting to deserialize object on a CUDA device but torch.cuda.is_available() is False" in str(e):
+                print("An error occurred: CUDA device is not available. Loading model on CPU.")
+                model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+            else:
+                raise e
+    else:
+        # GPUが利用不可の場合
+        device = torch.device('cpu')
+        model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+
     model.eval()
