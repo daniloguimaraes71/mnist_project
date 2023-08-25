@@ -72,7 +72,7 @@
 1. ソースコードのダウンロード：
    - プロジェクトのソースコードを適当な場所にダウンロードします。
 
-2. 展開と実行：
+2. ソースコード展開：
    - ターミナルを開き、プロジェクトフォルダに移動します。
      ```console
      $ cd [プロジェクトフォルダのパス]
@@ -107,6 +107,20 @@
 | `model_save_dir`| モデルの保存先：訓練後のモデルの重みを保存するディレクトリ。 |
 
 ## 7. 手順
+
+このセクションでは、MNIST認識のディープラーニングモデルを訓練し、テスト、評価するための手順を説明します。本章は以下の3つのサブセクションに分かれています。。
+
+- **7.1. 訓練コードの実行**: ここでは、ディープラーニングモデルの訓練を行うための手順を説明します。MNISTデータセットを使用してモデルを訓練するためのコードの実行方法が解説されています。
+
+- **7.2. テストコードの実行**: このセクションでは、訓練済みモデルをテストするための手順を説明します。テストデータを使用してモデルの性能を評価するためのコードの実行方法が詳しく説明されています。
+
+- **7.3. 評価コードを実行**: 訓練とテストが終了した後、モデルの評価を行うための手順について説明します。Jupyter Notebookを使用して訓練およびテストの結果を視覚化し、モデルの性能を分析する方法が解説されています。
+
+**注:_**  本章で紹介されるターミナルコマンドは、プロジェクトフォルダ内で実行する必要があります。プロジェクトフォルダ内に移動するために、以下のコマンドを使用してください。
+
+```console
+$ cd [プロジェクトフォルダのパス]
+```
 
 ### 7.1. 訓練コードの実行
 
@@ -179,7 +193,7 @@ $ python3 main.py --mode train
 2. テスト結果の保存パス：
 - テスト損失ファイル`test_losses.json`とテスト精度ファイル`test_accuracy.json`が以下のディレクトリに保存されます。
   ```
-  [プロジェクトフォルダのパス]/outputs/saved_models/[モデルバージョン]/metrics/training_losses.json`
+  [プロジェクトフォルダのパス]/outputs/saved_models/[モデルバージョン]/metrics/`
   ```
 
   **注:_**  詳細な出力内容やログのフォーマットについて、[8. 出力の詳細](#8-出力の詳細)をご確認ください。
@@ -195,17 +209,33 @@ $ python3 main.py --mode train
 2. **ブラウザでアクセス：**
 - Jupyter Notebook を起動した後、デフォルトのウェブブラウザが自動的に開かれ、Jupyter のダッシュボードが表示されます。ダッシュボードからNotebookファイルの`evaluation_mnist.ipynb`をダブルクリックし、Notebookを開きます。
 
+- 例)
+
+<img src="./screen_shots/jupyter_dashboard.png" alt="drawing" width="700"/>
+
 3. **コードセルの実行：**
-- 順番にセルを選択し、 Shift キーを押しながら Enter キーを押すと、セルが実行されます。
+- 自動的に新しいタブでNotebookが開かれます。順番にセルを選択し、 Shift キーを押しながら Enter キーを押すと、セルが実行されます。
+
+- 例)
+
+<img src="./screen_shots/run_jupyter_cell.png" alt="drawing" width="700"/>
 
 4. **セルの実行結果を確認：**
 - セル内のコードが実行された後、その実行結果がセルの下に表示されます。出力結果やエラーメッセージが表示されることがあります。
+
+- 例)
+
+<img src="./screen_shots/jupyter_cell_output.png" alt="drawing" width="700"/>
 
 5. **ノートブックの保存と閉じる：**
 作業が終わったら、ノートブックを保存しましょう。
 
 - ノートブックの上部メニューから「File」をクリックし、保存オプションを選択します。
 - ノートブックを閉じるには、「File」から「Close and Halt」を選択します。
+
+- 例)
+
+<img src="./screen_shots/save_and_close_notebook.png" alt="drawing" width="700"/>
 
 6. **シャットダウンと終了：**
 Jupyter Notebook を終了するには、ターミナルで Ctrl + C を押して、Notebook サーバーを停止します。
@@ -264,6 +294,38 @@ $ cat outputs/logs/output.log
 | モデルの保存と読み込み   | モデルの保存と読み込みに関する情報が表示され、特定のエポックでのモデルの保存場所やファイル名が記録されます。 |
 | エラーメッセージや警告   | 実行中に発生したエラーメッセージや警告が表示され、問題の特定と解決に役立つ情報が提供されます。 |
 | 実行中のプロセスに関する情報 | 実行中のさまざまなプロセスに関する情報が表示されます。これには、データの読み込み、モデルの訓練などが含まれます。 |
+
+ログファイルの中身の例)
+
+```
+2023-08-24 17:47:37,622 [INFO] Device: cuda
+2023-08-24 17:47:37,622 [INFO] Training started...
+2023-08-24 17:47:46,328 [INFO] Epoch [1/10], Average Loss: 0.4081
+2023-08-24 17:47:54,337 [INFO] Epoch [2/10], Average Loss: 0.1966
+2023-08-24 17:48:02,412 [INFO] Epoch [3/10], Average Loss: 0.1445
+2023-08-24 17:48:10,547 [INFO] Epoch [4/10], Average Loss: 0.1168
+2023-08-24 17:48:18,573 [INFO] Epoch [5/10], Average Loss: 0.0998
+2023-08-24 17:48:26,689 [INFO] Epoch [6/10], Average Loss: 0.0882
+2023-08-24 17:48:34,794 [INFO] Epoch [7/10], Average Loss: 0.0766
+2023-08-24 17:48:42,937 [INFO] Epoch [8/10], Average Loss: 0.0698
+2023-08-24 17:48:51,047 [INFO] Epoch [9/10], Average Loss: 0.0615
+2023-08-24 17:48:59,152 [INFO] Epoch [10/10], Average Loss: 0.0570
+2023-08-24 17:48:59,153 [INFO] Training completed.
+2023-08-24 17:48:59,153 [INFO] Model weights of version 1 saved in path ../outputs/saved_models/1/
+2023-08-24 17:49:46,161 [INFO] Testing started...
+2023-08-24 17:49:46,161 [INFO] Model Version 1
+2023-08-24 17:49:47,790 [INFO] Model epoch 1 - Test Accuracy: 0.9273 Test loss: 0.2481
+2023-08-24 17:49:49,081 [INFO] Model epoch 2 - Test Accuracy: 0.9519 Test loss: 0.1568
+2023-08-24 17:49:50,391 [INFO] Model epoch 3 - Test Accuracy: 0.9572 Test loss: 0.1419
+2023-08-24 17:49:51,673 [INFO] Model epoch 4 - Test Accuracy: 0.9633 Test loss: 0.1167
+2023-08-24 17:49:52,948 [INFO] Model epoch 5 - Test Accuracy: 0.9647 Test loss: 0.1121
+2023-08-24 17:49:54,233 [INFO] Model epoch 6 - Test Accuracy: 0.9676 Test loss: 0.1091
+2023-08-24 17:49:55,495 [INFO] Model epoch 7 - Test Accuracy: 0.9679 Test loss: 0.0958
+2023-08-24 17:49:56,757 [INFO] Model epoch 8 - Test Accuracy: 0.9719 Test loss: 0.0901
+2023-08-24 17:49:58,020 [INFO] Model epoch 9 - Test Accuracy: 0.9716 Test loss: 0.0925
+2023-08-24 17:49:59,281 [INFO] Model epoch 10 - Test Accuracy: 0.9722 Test loss: 0.0965
+2023-08-24 17:49:59,281 [INFO] Testing for all weights completed.
+```
 
 ### 8.2 出力データフォーマット
 
