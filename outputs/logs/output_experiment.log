@@ -1,0 +1,27 @@
+2023-08-25 19:14:30,690 [INFO] Device: cpu
+2023-08-25 19:14:30,690 [INFO] Training started...
+2023-08-25 19:14:39,198 [INFO] Epoch [1/10], Average Loss: 0.4047
+2023-08-25 19:14:47,384 [INFO] Epoch [2/10], Average Loss: 0.2027
+2023-08-25 19:14:55,573 [INFO] Epoch [3/10], Average Loss: 0.1466
+2023-08-25 19:15:03,753 [INFO] Epoch [4/10], Average Loss: 0.1208
+2023-08-25 19:15:11,934 [INFO] Epoch [5/10], Average Loss: 0.1036
+2023-08-25 19:15:20,103 [INFO] Epoch [6/10], Average Loss: 0.0877
+2023-08-25 19:15:28,277 [INFO] Epoch [7/10], Average Loss: 0.0817
+2023-08-25 19:15:36,453 [INFO] Epoch [8/10], Average Loss: 0.0713
+2023-08-25 19:15:44,603 [INFO] Epoch [9/10], Average Loss: 0.0661
+2023-08-25 19:15:52,622 [INFO] Epoch [10/10], Average Loss: 0.0575
+2023-08-25 19:15:52,622 [INFO] Training completed.
+2023-08-25 19:15:52,622 [INFO] Model weights of version 2 saved in path ../outputs/saved_models/2/
+2023-08-25 19:16:03,690 [INFO] Testing started...
+2023-08-25 19:16:03,690 [INFO] Model Version 2
+2023-08-25 19:16:04,949 [INFO] Model epoch 1 - Test Accuracy: 0.9130 Test loss: 0.2789
+2023-08-25 19:16:06,178 [INFO] Model epoch 2 - Test Accuracy: 0.9379 Test loss: 0.1892
+2023-08-25 19:16:07,403 [INFO] Model epoch 3 - Test Accuracy: 0.9561 Test loss: 0.1355
+2023-08-25 19:16:08,632 [INFO] Model epoch 4 - Test Accuracy: 0.9619 Test loss: 0.1206
+2023-08-25 19:16:09,868 [INFO] Model epoch 5 - Test Accuracy: 0.9617 Test loss: 0.1144
+2023-08-25 19:16:11,095 [INFO] Model epoch 6 - Test Accuracy: 0.9666 Test loss: 0.1150
+2023-08-25 19:16:12,318 [INFO] Model epoch 7 - Test Accuracy: 0.9715 Test loss: 0.0939
+2023-08-25 19:16:13,543 [INFO] Model epoch 8 - Test Accuracy: 0.9726 Test loss: 0.0916
+2023-08-25 19:16:14,773 [INFO] Model epoch 9 - Test Accuracy: 0.9520 Test loss: 0.1568
+2023-08-25 19:16:16,006 [INFO] Model epoch 10 - Test Accuracy: 0.9736 Test loss: 0.0885
+2023-08-25 19:16:16,007 [INFO] Testing for all weights completed.

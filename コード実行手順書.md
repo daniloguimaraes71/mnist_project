@@ -234,6 +234,7 @@ $ python3 main.py --mode train
 test_model_version 変数は、モデルバージョンを指定するための入力として使用されます。この変数には3つの異なる形式が有効です。
 
 - 'experimentresult': 本プロジェクト作成者による実験結果です。experimentresultの実験について、本Notebookにグラフと考察が記載されています。
+実験の出力はパスの`./outputs/saved_models/experimentresult`に入り、ログは`outputs/logs/output_experiment.log`に入っています。
 - 'latest': 最新のモデルバージョンを使用するための指定です。
 - 数値文字列（例: '1'、'2'、'10' など）: 指定したモデルバージョン番号を使用するための指定です。
 
