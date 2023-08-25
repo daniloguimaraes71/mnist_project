@@ -14,4 +14,4 @@ outputs/
 
 # Do not ignore experiment results
 !outputs/logs/output_experiment.log
-!outputs/saved_models/experimentresult/
+!outputs/saved_models/experimentresult/*
