@@ -82,7 +82,7 @@ def test_model(model, test_loader, config, model_version='latest'):
             accuracy = correct / total
             average_loss = running_loss / len(test_loader)
             model_file_name = model_path.split('/')[-1]
-            model_epoch_number = int(model_file_name.split('_')[2])
+            model_epoch_number = int(model_file_name.split('_')[3][5:])
             
             logging.info(f'Model epoch {model_epoch_number} - Test Accuracy: {accuracy:.4f} Test loss: {average_loss:.4f}')
 

@@ -37,7 +37,6 @@ def plot_metrics_from_json(metrics_path):
             with open(test_accuracy_path, 'r') as f:
                 test_accuracy_data = json.load(f)
             test_accuracy = [(int(list(value_dict.keys())[0][5:]), list(value_dict.values())[0]) for value_dict in test_accuracy_data]
-            test_accuracy.sort()
             available_graphs.append('Test Accuracy')
             
         # Test LossのJSONファイルが存在する場合、データを読み込み
@@ -45,8 +44,6 @@ def plot_metrics_from_json(metrics_path):
             with open(test_losses_path, 'r') as f:
                 test_losses_data = json.load(f)
             test_losses = [(int(list(value_dict.keys())[0][5:]), list(value_dict.values())[0]) for value_dict in test_losses_data]
-            
-            test_losses.sort()
             available_graphs.append('Test Loss')
 
         # Training LossのJSONファイルが存在する場合、データを読み込み
@@ -54,7 +51,6 @@ def plot_metrics_from_json(metrics_path):
             with open(training_losses_path, 'r') as f:
                 training_losses_data = json.load(f)
             training_losses = [(int(list(value_dict.keys())[0][5:]), list(value_dict.values())[0]) for value_dict in training_losses_data]
-            training_losses.sort()
             available_graphs.append('Training Loss')
 
         # 利用可能なグラフがない場合、メッセージを表示して終了
