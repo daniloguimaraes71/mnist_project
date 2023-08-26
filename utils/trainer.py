@@ -22,7 +22,7 @@ import logging
 import os
 import json
 
-def train_model(model, train_loader, config):
+def train_model(model, train_loader, val_loader, config):
     """
     モデルの訓練を実行します。
 
@@ -46,6 +46,7 @@ def train_model(model, train_loader, config):
     # 訓練を開始
     logging.info('Training started...')
     training_losses = []
+    validation_losses = []
     
     for epoch in range(config["epochs"]):
         model.train()
@@ -61,29 +62,48 @@ def train_model(model, train_loader, config):
         average_loss = running_loss / len(train_loader)
 
         # ログに訓練損失を追記
-        logging.info(f"Epoch [{epoch+1}/{config['epochs']}], Average Loss: {average_loss:.4f}")
-
-        training_losses_dict = {f'epoch{epoch+1}':average_loss}
+        #logging.info(f"Epoch [{epoch+1}/{config['epochs']}], Train Loss: {average_loss:.4f}")
         
-        # 各エポックの訓練損失を保存
+        # バリデーション
+        model.eval()
+        val_loss = 0.0
+        with torch.no_grad():
+            for val_inputs, val_labels in val_loader:
+                val_inputs, val_labels = val_inputs.to(device), val_labels.to(device)
+                val_outputs = model(val_inputs)
+                val_loss += criterion(val_outputs, val_labels).item()
+        average_val_loss = val_loss / len(val_loader)
+
+        # ログに検証損失を追記
+        logging.info(f"Epoch [{epoch+1}/{config['epochs']}], Train Loss: {average_loss:.4f}, Validation Loss: {average_val_loss:.4f}")
+        
+        training_losses_dict = {f'epoch{epoch+1}': average_loss}
+        validation_losses_dict = {f'epoch{epoch+1}': average_val_loss}
+
+        # 各エポックの訓練損失と検証損失を保存
         training_losses.append(training_losses_dict)
+        validation_losses.append(validation_losses_dict)
         
         # モデルのバージョンを取得し、保存
-        if epoch==0:
+        if epoch == 0:
             model_version = model_utils.get_model_new_version(config["model_save_dir"])
         else:
             model_version = model_utils.get_latest_model_version(config["model_save_dir"])
             
         model_utils.save_model(model, config["model_save_dir"], model_version, epoch+1)
 
-    metrics_folder = f"{config['model_save_dir']}{model_version}/metrics/"                                                                                                                                                                                
-    os.makedirs(metrics_folder, exist_ok=True) 
-        
-    # 訓練損失をJSONファイルに保存
+    metrics_folder = f"{config['model_save_dir']}{model_version}/metrics/"
+    os.makedirs(metrics_folder, exist_ok=True)
+
+    # 訓練損失と検証損失をJSONファイルに保存
     losses_filename = os.path.join(metrics_folder, f'training_losses.json')
     with open(losses_filename, 'w') as f:
         json.dump(training_losses, f)
         
+    validation_losses_filename = os.path.join(metrics_folder, f'validation_losses.json')
+    with open(validation_losses_filename, 'w') as f:
+        json.dump(validation_losses, f)
+
     # ログに訓練結果を追記
     logging.info('Training completed.')
     logging.info(f"Model weights of version {model_version} saved in path ../{config['model_save_dir']}{model_version}/")

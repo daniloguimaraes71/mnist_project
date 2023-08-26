@@ -79,6 +79,7 @@
     "batch_size": [バッチサイズ],
     "learning_rate": [学習率],
     "epochs": [エポック数],
+    "validation_split": [バリデーション分割率],
     "log_dir": "[ログの保存先]",
     "model_save_dir": "[モデルの保存先]"
 }
@@ -90,8 +91,10 @@
 | `batch_size`    | バッチサイズ：訓練やテスト時に使用するバッチのサイズ。 |
 | `learning_rate` | 学習率：モデルの重みを更新する際のステップサイズ。            |
 | `epochs`        | エポック数：訓練データ全体を何回使用するかを指定する回数。 |
+| `validation_split`| バリデーション分割率：訓練データを訓練セットとバリデーションセットに分割する割合。 |
 | `log_dir`       | ログの保存先：訓練の進捗や結果を保存するログファイルのディレクトリ。 |
 | `model_save_dir`| モデルの保存先：訓練後のモデルの重みを保存するディレクトリ。 |
+
 
 - **付録**
   ターミナルから`config.json`を編集する場合、以下の手順を参考にしてください。
@@ -151,20 +154,20 @@ $ python3 main.py --mode train
 - 訓練の進行状況や各エポックごとの訓練損失が表示されます。
 - 出力例)
   ```sh
-  2023-08-24 17:47:37,622 [INFO] Device: cuda
-  2023-08-24 17:47:37,622 [INFO] Training started...
-  2023-08-24 17:47:46,328 [INFO] Epoch [1/10], Average Loss: 0.4081
-  2023-08-24 17:47:54,337 [INFO] Epoch [2/10], Average Loss: 0.1966
-  2023-08-24 17:48:02,412 [INFO] Epoch [3/10], Average Loss: 0.1445
-  2023-08-24 17:48:10,547 [INFO] Epoch [4/10], Average Loss: 0.1168
-  2023-08-24 17:48:18,573 [INFO] Epoch [5/10], Average Loss: 0.0998
-  2023-08-24 17:48:26,689 [INFO] Epoch [6/10], Average Loss: 0.0882
-  2023-08-24 17:48:34,794 [INFO] Epoch [7/10], Average Loss: 0.0766
-  2023-08-24 17:48:42,937 [INFO] Epoch [8/10], Average Loss: 0.0698
-  2023-08-24 17:48:51,047 [INFO] Epoch [9/10], Average Loss: 0.0615
-  2023-08-24 17:48:59,152 [INFO] Epoch [10/10], Average Loss: 0.0570
-  2023-08-24 17:48:59,153 [INFO] Training completed.
-  2023-08-24 17:48:59,153 [INFO] Model weights of version 1 saved in path ../outputs/saved_models/1/
+  2023-08-26 10:13:10,322 [INFO] Device: cpu
+  2023-08-26 10:13:10,323 [INFO] Training started...
+  2023-08-26 10:13:18,166 [INFO] Epoch [1/10], Train Loss: 0.4247, Validation Loss: 0.2618
+  2023-08-26 10:13:26,107 [INFO] Epoch [2/10], Train Loss: 0.2145, Validation Loss: 0.1964
+  2023-08-26 10:13:34,045 [INFO] Epoch [3/10], Train Loss: 0.1584, Validation Loss: 0.1517
+  2023-08-26 10:13:42,055 [INFO] Epoch [4/10], Train Loss: 0.1286, Validation Loss: 0.1436
+  2023-08-26 10:13:50,054 [INFO] Epoch [5/10], Train Loss: 0.1080, Validation Loss: 0.1283
+  2023-08-26 10:13:58,207 [INFO] Epoch [6/10], Train Loss: 0.0943, Validation Loss: 0.1170
+  2023-08-26 10:14:06,347 [INFO] Epoch [7/10], Train Loss: 0.0814, Validation Loss: 0.1210
+  2023-08-26 10:14:14,347 [INFO] Epoch [8/10], Train Loss: 0.0729, Validation Loss: 0.1039
+  2023-08-26 10:14:22,293 [INFO] Epoch [9/10], Train Loss: 0.0675, Validation Loss: 0.1379
+  2023-08-26 10:14:30,168 [INFO] Epoch [10/10], Train Loss: 0.0582, Validation Loss: 0.1010
+  2023-08-26 10:14:30,169 [INFO] Training completed.
+  2023-08-26 10:14:30,169 [INFO] Model weights of version 6 saved in path ../outputs/saved_models/6/
   ```
 
 **2. 訓練結果の保存パス**
@@ -172,9 +175,9 @@ $ python3 main.py --mode train
   ```
   [プロジェクトフォルダのパス]/outputs/saved_models/[モデルバージョン]
   ```
-- 訓練損失ファイル`training_losses.json`が以下のディレクトリに保存されます。
+- 訓練損失ファイル`training_losses.json`とバリデーション損失ファイル`validation_losses.json`が以下のディレクトリに保存されます。
   ```
-  [プロジェクトフォルダのパス]/outputs/saved_models/[モデルバージョン]/metrics/training_losses.json
+  [プロジェクトフォルダのパス]/outputs/saved_models/[モデルバージョン]/metrics/
   ```
 
   **注:_**  詳細な出力内容やログのフォーマットについて、[8. 出力の詳細](#8-出力の詳細)をご確認ください。
@@ -285,17 +288,18 @@ Jupyter Notebook を終了するには、ターミナルで Ctrl + C を押し�
            ├── metrics
            │   ├── test_accuracy.json
            │   ├── test_losses.json
-           │   └── training_losses.json
-           ├── model_version1_epoch10_2023-08-23_17-02-24.pt
-           ├── model_version1_epoch1_2023-08-23_17-01-14.pt
-           ├── model_version1_epoch2_2023-08-23_17-01-22.pt
-           ├── model_version1_epoch3_2023-08-23_17-01-30.pt
-           ├── model_version1_epoch4_2023-08-23_17-01-38.pt
-           ├── model_version1_epoch5_2023-08-23_17-01-45.pt
-           ├── model_version1_epoch6_2023-08-23_17-01-53.pt
-           ├── model_version1_epoch7_2023-08-23_17-02-01.pt
-           ├── model_version1_epoch8_2023-08-23_17-02-09.pt
-           └── model_version1_epoch9_2023-08-23_17-02-16.pt
+           │   ├── training_losses.json
+           │   └── validation_losses.json
+           ├── model_version_1_epoch1_2023-08-23_17-01-14.pt
+           ├── model_version_1_epoch2_2023-08-23_17-01-22.pt
+           ├── model_version_1_epoch3_2023-08-23_17-01-30.pt
+           ├── model_version_1_epoch4_2023-08-23_17-01-38.pt
+           ├── model_version_1_epoch5_2023-08-23_17-01-45.pt
+           ├── model_version_1_epoch6_2023-08-23_17-01-53.pt
+           ├── model_version_1_epoch7_2023-08-23_17-02-01.pt
+           ├── model_version_1_epoch8_2023-08-23_17-02-09.pt
+           ├── model_version_1_epoch9_2023-08-23_17-02-16.pt
+           └── model_version_1_epoch10_2023-08-23_17-02-24.pt
 ```
 
 本章は以下の2つのサブセクションに分かれています。
@@ -327,33 +331,33 @@ $ cat outputs/logs/output.log
 ログファイルの中身の例)
 
 ```
-2023-08-24 17:47:37,622 [INFO] Device: cuda
-2023-08-24 17:47:37,622 [INFO] Training started...
-2023-08-24 17:47:46,328 [INFO] Epoch [1/10], Average Loss: 0.4081
-2023-08-24 17:47:54,337 [INFO] Epoch [2/10], Average Loss: 0.1966
-2023-08-24 17:48:02,412 [INFO] Epoch [3/10], Average Loss: 0.1445
-2023-08-24 17:48:10,547 [INFO] Epoch [4/10], Average Loss: 0.1168
-2023-08-24 17:48:18,573 [INFO] Epoch [5/10], Average Loss: 0.0998
-2023-08-24 17:48:26,689 [INFO] Epoch [6/10], Average Loss: 0.0882
-2023-08-24 17:48:34,794 [INFO] Epoch [7/10], Average Loss: 0.0766
-2023-08-24 17:48:42,937 [INFO] Epoch [8/10], Average Loss: 0.0698
-2023-08-24 17:48:51,047 [INFO] Epoch [9/10], Average Loss: 0.0615
-2023-08-24 17:48:59,152 [INFO] Epoch [10/10], Average Loss: 0.0570
-2023-08-24 17:48:59,153 [INFO] Training completed.
-2023-08-24 17:48:59,153 [INFO] Model weights of version 1 saved in path ../outputs/saved_models/1/
-2023-08-24 17:49:46,161 [INFO] Testing started...
-2023-08-24 17:49:46,161 [INFO] Model Version 1
-2023-08-24 17:49:47,790 [INFO] Model epoch 1 - Test Accuracy: 0.9273 Test loss: 0.2481
-2023-08-24 17:49:49,081 [INFO] Model epoch 2 - Test Accuracy: 0.9519 Test loss: 0.1568
-2023-08-24 17:49:50,391 [INFO] Model epoch 3 - Test Accuracy: 0.9572 Test loss: 0.1419
-2023-08-24 17:49:51,673 [INFO] Model epoch 4 - Test Accuracy: 0.9633 Test loss: 0.1167
-2023-08-24 17:49:52,948 [INFO] Model epoch 5 - Test Accuracy: 0.9647 Test loss: 0.1121
-2023-08-24 17:49:54,233 [INFO] Model epoch 6 - Test Accuracy: 0.9676 Test loss: 0.1091
-2023-08-24 17:49:55,495 [INFO] Model epoch 7 - Test Accuracy: 0.9679 Test loss: 0.0958
-2023-08-24 17:49:56,757 [INFO] Model epoch 8 - Test Accuracy: 0.9719 Test loss: 0.0901
-2023-08-24 17:49:58,020 [INFO] Model epoch 9 - Test Accuracy: 0.9716 Test loss: 0.0925
-2023-08-24 17:49:59,281 [INFO] Model epoch 10 - Test Accuracy: 0.9722 Test loss: 0.0965
-2023-08-24 17:49:59,281 [INFO] Testing for all weights completed.
+2023-08-26 10:13:10,322 [INFO] Device: cpu
+2023-08-26 10:13:10,323 [INFO] Training started...
+2023-08-26 10:13:18,166 [INFO] Epoch [1/10], Train Loss: 0.4247, Validation Loss: 0.2618
+2023-08-26 10:13:26,107 [INFO] Epoch [2/10], Train Loss: 0.2145, Validation Loss: 0.1964
+2023-08-26 10:13:34,045 [INFO] Epoch [3/10], Train Loss: 0.1584, Validation Loss: 0.1517
+2023-08-26 10:13:42,055 [INFO] Epoch [4/10], Train Loss: 0.1286, Validation Loss: 0.1436
+2023-08-26 10:13:50,054 [INFO] Epoch [5/10], Train Loss: 0.1080, Validation Loss: 0.1283
+2023-08-26 10:13:58,207 [INFO] Epoch [6/10], Train Loss: 0.0943, Validation Loss: 0.1170
+2023-08-26 10:14:06,347 [INFO] Epoch [7/10], Train Loss: 0.0814, Validation Loss: 0.1210
+2023-08-26 10:14:14,347 [INFO] Epoch [8/10], Train Loss: 0.0729, Validation Loss: 0.1039
+2023-08-26 10:14:22,293 [INFO] Epoch [9/10], Train Loss: 0.0675, Validation Loss: 0.1379
+2023-08-26 10:14:30,168 [INFO] Epoch [10/10], Train Loss: 0.0582, Validation Loss: 0.1010
+2023-08-26 10:14:30,169 [INFO] Training completed.
+2023-08-26 10:14:30,169 [INFO] Model weights of version 6 saved in path ../outputs/saved_models/6/
+2023-08-26 10:15:14,229 [INFO] Testing started...
+2023-08-26 10:15:14,229 [INFO] Model Version 6
+2023-08-26 10:15:15,500 [INFO] Model epoch 1 - Test Accuracy: 0.9291 Test loss: 0.2395
+2023-08-26 10:15:16,759 [INFO] Model epoch 2 - Test Accuracy: 0.9435 Test loss: 0.1797
+2023-08-26 10:15:18,009 [INFO] Model epoch 3 - Test Accuracy: 0.9537 Test loss: 0.1439
+2023-08-26 10:15:19,257 [INFO] Model epoch 4 - Test Accuracy: 0.9583 Test loss: 0.1330
+2023-08-26 10:15:20,513 [INFO] Model epoch 5 - Test Accuracy: 0.9620 Test loss: 0.1243
+2023-08-26 10:15:21,762 [INFO] Model epoch 6 - Test Accuracy: 0.9663 Test loss: 0.1175
+2023-08-26 10:15:23,016 [INFO] Model epoch 7 - Test Accuracy: 0.9636 Test loss: 0.1142
+2023-08-26 10:15:24,264 [INFO] Model epoch 8 - Test Accuracy: 0.9705 Test loss: 0.0991
+2023-08-26 10:15:25,517 [INFO] Model epoch 9 - Test Accuracy: 0.9570 Test loss: 0.1352
+2023-08-26 10:15:26,767 [INFO] Model epoch 10 - Test Accuracy: 0.9721 Test loss: 0.0963
+2023-08-26 10:15:26,768 [INFO] Testing for all weights completed.
 ```
 
 ### 8.2 出力データフォーマット
@@ -395,6 +399,7 @@ $ cat outputs/logs/output.log
 | test_accuracy.json       | 各エポックにおけるテスト精度。            |
 | test_losses.json         | 各エポックにおけるテスト損失。            |
 | training_losses.json     | 各エポックにおける訓練損失。      |
+| validation_losses.json     | 各エポックにおけるバリデーション損失。      |
 
 これらのファイルは、モデルの性能評価や学習の進行状況を定量的に分析するための貴重な情報源です。
 
@@ -427,6 +432,16 @@ $ cat outputs/logs/output.log
     "epoch_1": 0.15,
     "epoch_2": 0.10,
     "epoch_3": 0.08,
+    ...
+}
+```
+
+- validation_losses.json
+```json
+{
+    "epoch_1": 0.16,
+    "epoch_2": 0.09,
+    "epoch_3": 0.07,
     ...
 }
 ```

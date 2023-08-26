@@ -30,9 +30,18 @@ def train(config):
         None
     """
     train_loader = get_mnist_data_loader(config["batch_size"], is_train=True)
+    
+    # データセットを訓練データと検証データに分割
+    total_size = len(train_loader.dataset)
+    val_size = int(total_size * config["validation_split"])
+    train_size = total_size - val_size
+    train_dataset, val_dataset = torch.utils.data.random_split(train_loader.dataset, [train_size, val_size])
+    
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=config["batch_size"], shuffle=True)
+    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=config["batch_size"], shuffle=False)
 
     # モデルの初期化
     model = NeuralNetworkModel()
 
     # モデルの訓練
-    trainer.train_model(model, train_loader, config)
+    trainer.train_model(model, train_loader, val_loader, config)  # Pass val_loader to train_model

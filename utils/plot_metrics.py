@@ -17,7 +17,7 @@ import os
 
 def plot_metrics_from_json(metrics_path):
     """
-    指定されたメトリクスデータフォルダから、訓練損失、テスト損失、およびテスト精度のグラフをプロットします。
+    指定されたメトリクスデータフォルダから、訓練損失、検証損失、テスト損失、およびテスト精度のグラフをプロットします。
 
     Args:
         metrics_path (str): メトリクスデータフォルダへのパス
@@ -30,6 +30,7 @@ def plot_metrics_from_json(metrics_path):
         test_accuracy_path = os.path.join(metrics_path, 'test_accuracy.json')
         test_losses_path = os.path.join(metrics_path, 'test_losses.json')
         training_losses_path = os.path.join(metrics_path, 'training_losses.json')
+        validation_losses_path = os.path.join(metrics_path, 'validation_losses.json')
         
         available_graphs = []
         # Test AccuracyのJSONファイルが存在する場合、データを読み込み
@@ -45,13 +46,20 @@ def plot_metrics_from_json(metrics_path):
                 test_losses_data = json.load(f)
             test_losses = [(int(list(value_dict.keys())[0][5:]), list(value_dict.values())[0]) for value_dict in test_losses_data]
             available_graphs.append('Test Loss')
-
+            
         # Training LossのJSONファイルが存在する場合、データを読み込み
         if os.path.exists(training_losses_path):
             with open(training_losses_path, 'r') as f:
                 training_losses_data = json.load(f)
             training_losses = [(int(list(value_dict.keys())[0][5:]), list(value_dict.values())[0]) for value_dict in training_losses_data]
             available_graphs.append('Training Loss')
+            
+        # Validation LossのJSONファイルが存在する場合、データを読み込み
+        if os.path.exists(validation_losses_path):
+            with open(validation_losses_path, 'r') as f:
+                validation_losses_data = json.load(f)
+            validation_losses = [(int(list(value_dict.keys())[0][5:]), list(value_dict.values())[0]) for value_dict in validation_losses_data]
+            available_graphs.append('Validation Loss')
 
         # 利用可能なグラフがない場合、メッセージを表示して終了
         if len(available_graphs) == 0:
@@ -61,15 +69,20 @@ def plot_metrics_from_json(metrics_path):
         epochs = [epoch for epoch, _ in training_losses]
         
         # 利用可能なグラフをプロット
-        if 'Training Loss' in available_graphs or 'Test Loss' in available_graphs:
-            plt.figure(figsize=(10, 5))
+        if 'Training Loss' in available_graphs or 'Test Loss' in available_graphs or 'Validation Loss' in available_graphs:
+            plt.figure(figsize=(12, 6))
+            
             if 'Training Loss' in available_graphs:
                 plt.plot(epochs, [value for _, value in training_losses], label='Training Loss')
+            
             if 'Test Loss' in available_graphs:
                 plt.plot(epochs, [value for _, value in test_losses], label='Test Loss')
+            
+            if 'Validation Loss' in available_graphs:
+                plt.plot(epochs, [value for _, value in validation_losses], label='Validation Loss')
+            
             plt.xlabel('Epoch')
-            plt.ylabel('Loss')
-            plt.title('Training and Test Losses')
+            plt.title('Training, Validation, and Test Losses')
             plt.legend()
             plt.grid()
             plt.show()
